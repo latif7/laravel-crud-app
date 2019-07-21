@@ -6,26 +6,26 @@
     <title>Report Panel</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="apple-touch-icon" href="{{ asset('assets/img') }}/favicon.ico">
+    <link rel="apple-touch-icon" href="<?php echo e(asset('assets/img')); ?>/favicon.ico">
 
-    <link rel="shortcut icon" href="{{ asset('assets/img') }}/favicon.ico">
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="<?php echo e(asset('assets/img')); ?>/favicon.ico">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/Ionicons/css/ionicons.min.css">
     <!-- jvectormap -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('assets') }}/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="{{ asset('assets') }}/bower_components/morris.js/morris.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('assets')); ?>/bower_components/morris.js/morris.css">
     <style>
         .datepicker{
             z-index: 999999999 !important;
@@ -59,7 +59,7 @@
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="{{ route('dashboard') }}" class="logo">
+        <a href="<?php echo e(route('dashboard')); ?>" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>SCB</b></span>
             <!-- logo for regular state and mobile devices -->
@@ -79,16 +79,17 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('assets') }}/img/avatar.png" class="user-image" alt="User Image">
-                            <span class="hidden-xs">{{ auth()->user()->name }}</span>
+                            <img src="<?php echo e(asset('assets')); ?>/img/avatar.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs"><?php echo e(auth()->user()->name); ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="{{ asset('assets') }}/img/avatar.png" class="img-circle" alt="User Image">
+                                <img src="<?php echo e(asset('assets')); ?>/img/avatar.png" class="img-circle" alt="User Image">
 
                                 <p>
-                                    {{ auth()->user()->name }}
+                                    <?php echo e(auth()->user()->name); ?>
+
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -96,11 +97,11 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="{{ route('users.change-password') }}" class="btn btn-primary btn-flat">Change Password</a>
+                                    <a href="<?php echo e(route('users.change-password')); ?>" class="btn btn-primary btn-flat">Change Password</a>
                                 </div>
                                 <div class="pull-right">
-                                    <form action="{{ route('logout') }}" method="post">
-                                        @csrf
+                                    <form action="<?php echo e(route('logout')); ?>" method="post">
+                                        <?php echo csrf_field(); ?>
                                         <button type="submit" class="btn btn-default btn-flat">Logout</button>
                                     </form>
 
@@ -123,13 +124,13 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li class="{{ (request()->is('dashboard')) ? 'active' : '' }} menu-open">
-                    <a href="{{ route('dashboard') }}">
+                <li class="<?php echo e((request()->is('dashboard')) ? 'active' : ''); ?> menu-open">
+                    <a href="<?php echo e(route('dashboard')); ?>">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li class="treeview {{ (request()->is('report') || request()->is('summery-report')) ? 'mennu-open active' : '' }}">
+                <li class="treeview <?php echo e((request()->is('report') || request()->is('summery-report')) ? 'mennu-open active' : ''); ?>">
                     <a href="#">
                         <i class="fa fa-pie-chart"></i>
                         <span>Report</span>
@@ -137,19 +138,19 @@
                           <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
-                    <ul class="treeview-menu {{ (request()->is('report-details') || request()->is('summery-report')) ? 'show' : '' }}">
-                        <li class="{{ (request()->is('report')) ? 'active' : '' }}" ><a href="{{ route('report-details') }}"><i class="fa fa-circle-o"></i> Details</a></li>
-                        <li class="{{ (request()->is('summery-report')) ? 'active' : '' }}"><a href="{{ route('summery-report') }}"><i class="fa fa-circle-o"></i> Summery</a></li>
+                    <ul class="treeview-menu <?php echo e((request()->is('report-details') || request()->is('summery-report')) ? 'show' : ''); ?>">
+                        <li class="<?php echo e((request()->is('report')) ? 'active' : ''); ?>" ><a href="<?php echo e(route('report-details')); ?>"><i class="fa fa-circle-o"></i> Details</a></li>
+                        <li class="<?php echo e((request()->is('summery-report')) ? 'active' : ''); ?>"><a href="<?php echo e(route('summery-report')); ?>"><i class="fa fa-circle-o"></i> Summery</a></li>
 
                     </ul>
                 </li>
-                @if(auth()->user()->hasRole('admin'))
-                    <li class="{{ (request()->is('users*')) ? 'active' : '' }}">
-                        <a href="{{ route('users.index') }}">
+                <?php if(auth()->user()->hasRole('admin')): ?>
+                    <li class="<?php echo e((request()->is('users*')) ? 'active' : ''); ?>">
+                        <a href="<?php echo e(route('users.index')); ?>">
                             <i class="fa fa-users"></i> <span>Manage Users</span>
                         </a>
                     </li>
-                @endif
+                <?php endif; ?>
 
             </ul>
         </section>
@@ -159,22 +160,23 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        @if(Session::has('accessDenied'))
+        <?php if(Session::has('accessDenied')): ?>
         <section class="content-header">
             <div class="row">
                 <div class="col-md-12">
 
                     <br>
                     <div class="alert alert-danger">
-                        <strong>Error!</strong> {{ Session::get('accessDenied') }}
+                        <strong>Error!</strong> <?php echo e(Session::get('accessDenied')); ?>
+
                     </div>
 
                 </div>
             </div>
         </section>
-        @endif
+        <?php endif; ?>
 
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
 
     </div>
     <!-- /.content-wrapper -->
@@ -183,7 +185,7 @@
         <div class="pull-right hidden-xs">
 
         </div>
-        <strong>Copyright &copy; {{ \Carbon\Carbon::now()->format('Y') . "-" . (\Carbon\Carbon::now()->format('Y')+1) }} <a href="https://sslwireless.com/" target="__blank">SSL Wireless</a>.</strong> All rights
+        <strong>Copyright &copy; <?php echo e(\Carbon\Carbon::now()->format('Y') . "-" . (\Carbon\Carbon::now()->format('Y')+1)); ?> <a href="https://sslwireless.com/" target="__blank">SSL Wireless</a>.</strong> All rights
         reserved.
     </footer>
 
@@ -196,35 +198,35 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
-<script src="{{ asset('assets') }}/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="{{ asset('assets') }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
-<script src="{{ asset('assets') }}/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('assets') }}/js/adminlte.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/js/adminlte.min.js"></script>
 <!-- Sparkline -->
-<script src="{{ asset('assets') }}/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <!-- jvectormap  -->
-<script src="{{ asset('assets') }}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="{{ asset('assets') }}/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-{{--datatable--}}
-<script src="{{ asset('assets') }}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{{ asset('assets') }}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="{{ asset('assets') }}/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="{{ asset('assets') }}/bower_components/moment/min/moment.min.js"></script>
-<script src="{{ asset('assets') }}/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap datepicker -->
-<script src="{{ asset('assets') }}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<!-- ChartJS -->
-{{--<script src="{{ asset('assets') }}/bower_components/chart.js/Chart.js"></script>--}}
-<!--  dashboard demo (This is only for demo purposes) -->
-{{--<script src="{{ asset('assets') }}/js/pages/dashboard2.js"></script>--}}
-<!--  for demo purposes -->
-<script src="{{ asset('assets') }}/js/demo.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
-@yield('scripts')
+<script src="<?php echo e(asset('assets')); ?>/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="<?php echo e(asset('assets')); ?>/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/moment/min/moment.min.js"></script>
+<script src="<?php echo e(asset('assets')); ?>/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="<?php echo e(asset('assets')); ?>/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- ChartJS -->
+
+<!--  dashboard demo (This is only for demo purposes) -->
+
+<!--  for demo purposes -->
+<script src="<?php echo e(asset('assets')); ?>/js/demo.js"></script>
+
+<?php echo $__env->yieldContent('scripts'); ?>
 
 <!-- page script -->
 <script>
@@ -233,3 +235,4 @@
 
 </body>
 </html>
+<?php /**PATH /var/www/html/crud-app/resources/views/layouts/admin_master.blade.php ENDPATH**/ ?>

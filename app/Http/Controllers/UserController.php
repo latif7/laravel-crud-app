@@ -14,6 +14,11 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    private $model;
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,7 +28,7 @@ class UserController extends Controller
     public function index()
     {
         $data['roles'] = RolesEnum::getValues();
-        $data['users'] = User::with('createdBy', 'updatedBy')->paginate(25);
+        $data['users'] = $this->model->with('createdBy', 'updatedBy')->paginate(25);
         return view('users.index', $data);
     }
 
@@ -37,27 +42,23 @@ class UserController extends Controller
     {
 
         try {
-            $user = new User();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->role = $request->input('role');
-            $user->password = bcrypt($request->input('password'));
-            $user->status = ($request->status == 'on') ? 'Active':'Inactive';
-            $user->created_by = auth()->user()->id;
-            $status = $user->save();
+
+            $this->model->name = $request->input('name');
+            $this->model->email = $request->input('email');
+            $this->model->role = $request->input('role');
+            $this->model->password = bcrypt($request->input('password'));
+            $this->model->status = ($request->status == 'on') ? 'Active':'Inactive';
+            $this->model->created_by = auth()->user()->id;
+            $status = $this->model->save();
 
             if ($status) {
-                session()->flash('success',true);
-                session()->flash('message',"User created successfully!");
+                session()->flash('successMessage',"User created successfully!");
             } else {
-                session()->flash('success',false);
-                session()->flash('message',"Saved Failed. Something went wrong!");
+                session()->flash('errorMessage',"Saved Failed. Something went wrong!");
             }
 
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
-            session()->flash('success',false);
-            session()->flash('message',"Saved Failed. Something went wrong!");
+            session()->flash('errorMessage',"Saved Failed. Something went wrong!");
             Log::error('User Create Error:'. $exception->getMessage());
         }
 
@@ -75,11 +76,11 @@ class UserController extends Controller
     {
         try {
             $data['roles'] = RolesEnum::getValues();
-            $data['user'] = User::findOrFail($id);
+            $data['user'] = $this->model->findOrFail($id);
         } catch (\Exception $exception) {
             abort(404);
         }
-        return view('users.edit_user', $data);
+        return view('users.edit', $data);
     }
 
     /**
@@ -89,34 +90,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
         try {
-            $rules = [
-                'name' => 'required|max:50',
-                'email'=>['required','max:50', Rule::unique('users')->ignore($id)],
-            ];
+            $user = $this->model->findOrFail($id);
 
-            if ($request->filled('password')) {
-                $rules['password'] = 'required|min:8|max:50|confirmed';
-                $rules['password_confirmation'] = 'required|min:8|max:50';
-            }
-
-            $validator = Validator::make($request->all(), $rules);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
+            if ($user->id == auth()->user()->id) {
+                session()->flash('errorMessage',"Sorry, You cannot update your information by yourself.");
             } else {
-
-                $user = User::findOrFail($id);
-
-                if ($user->id == auth()->user()->id) {
-                    session()->flash('success',false);
-                    session()->flash('message',"Sorry, You cannot update your information by yourself.");
-                    return redirect()->back();
-                }
 
                 $user->name = $request->input('name');
                 $user->email = $request->input('email');
@@ -131,17 +112,14 @@ class UserController extends Controller
                 $status = $user->save();
 
                 if ($status) {
-                    session()->flash('success',true);
-                    session()->flash('message',"User Updated successfully!");
+                    session()->flash('successMessage',"User Updated successfully!");
                 } else {
-                    session()->flash('success',false);
-                    session()->flash('message',"Saved Failed. Something went wrong!");
+                    session()->flash('errorMessage',"Saved Failed. Something went wrong!");
                 }
             }
-
+            
         } catch (\Exception $exception) {
-            session()->flash('success',false);
-            session()->flash('message',"Saved Failed. Something went wrong!");
+            session()->flash('errorMessage',"Saved Failed. Something went wrong!");
             Log::error('User Update Error:'. $exception->getMessage());
         }
         return redirect()->back();
@@ -177,24 +155,20 @@ class UserController extends Controller
             }
 
             if (!Hash::check($request->old_password, auth()->user()->password)) {
-                session()->flash('success', false);
-                session()->flash('message', "Old password does not match!");
-                return redirect()->back();
-            }
-
-            $status = User::where('id', auth()->user()->id)->update(['password' => bcrypt($request->password)]);
-
-            if ($status) {
-                session()->flash('success',true);
-                session()->flash('message',"Password Changed Successfully!");
+                session()->flash('errorMessage', "Old password does not match!");
             } else {
-                session()->flash('success',false);
-                session()->flash('message',"Failed. Something went wrong!");
+                
+                $status = $this->model->where('id', auth()->user()->id)->update(['password' => bcrypt($request->password)]);
+
+                if ($status) {
+                    session()->flash('successMessage',"Password Changed Successfully!");
+                } else {
+                    session()->flash('errorMessage',"Failed. Something went wrong!");
+                }
             }
 
         } catch (\Exception $exception) {
-            session()->flash('success',false);
-            session()->flash('message',"Saved Failed. Something went wrong!");
+            session()->flash('errorMessage',"Saved Failed. Something went wrong!");
             Log::error('User Password Change Error:'. $exception->getMessage());
         }
         return redirect()->back();

@@ -25,12 +25,29 @@ class UserRequest extends FormRequest
     public function rules()
     {
 
-        return [
-            'name' => 'required|max:50',
-            'email' => 'required|email|unique:users,email|max:50',
-            'role' => 'required',
-            'password' => 'required|min:8|max:50|confirmed',
-            'password_confirmation' => 'required|min:8|max:50',
-        ];
+        $method = $this->getMethod();
+
+        if ($method == "POST") {
+            $rules = [
+                'name' => 'required|max:50',
+                'email' => 'required|email|unique:users,email|max:50',
+                'role' => 'required',
+                'password' => 'required|min:8|max:50|confirmed',
+                'password_confirmation' => 'required|min:8|max:50',
+            ];
+        } elseif ($method == "PUT") {
+            $rules = [
+                'name' => 'required|max:50',
+                'email' => ['required','email','max:50', Rule::unique('users')->ignore($this->segment(2))],
+                'role' => 'required',
+            ];
+
+            if ($this->request->filled('password')) {
+                $rules['password'] = 'required|min:8|max:50|confirmed';
+                $rules['password_confirmation'] = 'required|min:8|max:50';
+            }
+        }
+
+        return $rules;
     }
 }

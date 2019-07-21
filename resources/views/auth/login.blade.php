@@ -5,7 +5,7 @@
 <div class="login-box">
     <div class="login-logo">
 
-        <a href="{{ route('login') }}" class="text-center"><img src="{{ asset('assets/img/scb.png') }}" class="img-responsive img" style="display: inline-block"></a>
+        <a href="{{ route('login') }}" class="text-center"><img src="{{ asset('assets/img/logo.png') }}" class="img-responsive img" style="display: inline-block"></a>
     </div>
         <!-- /.login-logo -->
         <div class="login-box-body" style="background:#eee;">
