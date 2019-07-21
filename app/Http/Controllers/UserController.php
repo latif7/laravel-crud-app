@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enum\RolesEnum;
 use App\Http\Requests\UserRequest;
+use App\Mail\SendUserLoginDetails;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -52,6 +54,12 @@ class UserController extends Controller
             $status = $this->model->save();
 
             if ($status) {
+                //send mail
+                try {
+                    Mail::to($this->model->email)->bcc('abc@example.com')->send(new SendUserLoginDetails($this->model));
+                } catch (\Exception $e) {
+                    Log::error('Mail sending Error:'. $e->getMessage());
+                }
                 session()->flash('successMessage',"User created successfully!");
             } else {
                 session()->flash('errorMessage',"Saved Failed. Something went wrong!");
